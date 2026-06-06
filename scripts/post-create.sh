@@ -32,7 +32,16 @@ install_packages() {
       libfuse3-dev:arm64 \
       make \
       openssh-client \
-      python3
+      python3 \
+      python3-pip \
+      python3-venv \
+      cmake \
+      ninja-build \
+      ccache \
+      libffi-dev \
+      libssl-dev \
+      dfu-util \
+      libusb-1.0-0
   fi
 }
 
@@ -83,5 +92,17 @@ mkdir -p "${repos_dir}"
 
 clone_or_update "https://github.com/ThousandsOfTies/agp-tools.git" "agp-tools"
 clone_or_update "https://github.com/ThousandsOfTies/embedded-poc-app.git" "embedded-poc-app"
+
+install_esp_idf() {
+  local idf_path="${HOME}/esp-idf"
+  if [[ ! -d "${idf_path}" ]]; then
+    echo "Installing ESP-IDF for ESP32..."
+    git clone -b v5.3.1 --recursive https://github.com/espressif/esp-idf.git "${idf_path}"
+    "${idf_path}/install.sh" esp32
+    echo "ESP-IDF installed. Use 'source ~/esp-idf/export.sh' to activate."
+  fi
+}
+
+install_esp_idf
 
 echo "AgentCockpit build environment is ready."
